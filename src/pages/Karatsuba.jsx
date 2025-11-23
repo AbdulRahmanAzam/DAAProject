@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { KaratsubaControls, KaratsubaPlayback } from '../components/karatsuba/Panels'
+import { SAMPLE_INTEGER_INPUTS } from '../utils/karatsuba/sampleInputs'
 import DryRun from '../components/karatsuba/DryRun'
 import TreeCanvas from '../components/karatsuba/TreeCanvas'
 import { buildKaratsubaSteps, buildKaratsubaTreeAndSteps } from '../utils/karatsuba/karatsuba'
@@ -80,7 +81,25 @@ export default function Karatsuba() {
 
         <section className="grid gap-8 lg:grid-cols-[320px_1fr]">
           <aside className="space-y-6">
-            <KaratsubaControls a={a} b={b} setA={setA} setB={setB} digits={digits} setDigits={setDigits} algorithm={algorithm} setAlgorithm={setAlgorithm} visualizationType={visualizationType} setVisualizationType={setVisualizationType} onRandomize={onRandomize} onClear={onClear} />
+            <KaratsubaControls
+              a={a}
+              b={b}
+              setA={setA}
+              setB={setB}
+              digits={digits}
+              setDigits={setDigits}
+              algorithm={algorithm}
+              setAlgorithm={setAlgorithm}
+              visualizationType={visualizationType}
+              setVisualizationType={setVisualizationType}
+              onRandomize={onRandomize}
+              onClear={onClear}
+              sampleInputs={SAMPLE_INTEGER_INPUTS}
+              onSelectSample={() => {
+                setStepIndex(0)
+                setPlaying(false)
+              }}
+            />
             <KaratsubaPlayback playing={playing} setPlaying={setPlaying} stepIndex={stepIndex} stepsLength={steps.length} onStepOnce={stepOnce} onRestart={onRestart} speed={speed} setSpeed={setSpeed} product={stepIndex >= steps.length ? product : null} />
           </aside>
           <div className="space-y-6">

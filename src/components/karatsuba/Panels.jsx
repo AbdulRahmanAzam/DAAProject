@@ -1,6 +1,6 @@
 import React from 'react'
 
-export function KaratsubaControls({ a, b, setA, setB, digits, setDigits, algorithm, setAlgorithm, visualizationType, setVisualizationType, onRandomize, onClear }) {
+export function KaratsubaControls({ a, b, setA, setB, digits, setDigits, algorithm, setAlgorithm, visualizationType, setVisualizationType, onRandomize, onClear, sampleInputs = [], onSelectSample }) {
   return (
     <div className="rounded-2xl bg-slate-900/70 p-6 ring-1 ring-white/5">
       <h2 className="text-lg font-semibold">Controls</h2>
@@ -13,6 +13,27 @@ export function KaratsubaControls({ a, b, setA, setB, digits, setDigits, algorit
           Number B
           <input value={b} onChange={(e) => setB(e.target.value.replace(/\D/g,''))} className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-emerald-400" />
         </label>
+        {sampleInputs.length > 0 && (
+          <label className="flex flex-col gap-2 text-sm text-slate-300">
+            Sample input pair
+            <select
+              defaultValue=""
+              onChange={(e) => {
+                const id = e.target.value
+                if (!id) return
+                const sel = sampleInputs.find(s => s.id === id)
+                if (!sel) return
+                setA(sel.a)
+                setB(sel.b)
+                onSelectSample && onSelectSample(sel)
+              }}
+              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-cyan-400"
+            >
+              <option value="">-- choose 100+ digit pair --</option>
+              {sampleInputs.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
+            </select>
+          </label>
+        )}
         <label className="flex flex-col gap-2 text-sm text-slate-300">
           Random digits
           <input type="number" min="1" max="16" value={digits} onChange={(e)=>setDigits(e.target.value)} className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-emerald-400" />

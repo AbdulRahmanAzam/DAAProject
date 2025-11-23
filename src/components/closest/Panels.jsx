@@ -12,6 +12,8 @@ export function ControlsPanel({
   manualPoint,
   setManualPoint,
   onAddPoint,
+  sampleSets = [],
+  onSelectSample,
 }) {
   return (
     <div className="rounded-2xl bg-slate-900/70 p-6 ring-1 ring-white/5">
@@ -28,6 +30,25 @@ export function ControlsPanel({
             className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-emerald-400"
           />
         </label>
+        {sampleSets.length > 0 && (
+          <label className="flex flex-col gap-2 text-sm text-slate-300">
+            Preloaded sample set
+            <select
+              defaultValue=""
+              onChange={(e) => {
+                const id = e.target.value
+                if (!id) return
+                onSelectSample && onSelectSample(id)
+              }}
+              className="rounded-md border border-slate-700 bg-slate-950 px-3 py-2 text-white outline-none focus:border-cyan-400"
+            >
+              <option value="">-- choose sample (105 pts) --</option>
+              {sampleSets.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
+            </select>
+          </label>
+        )}
         <label className="flex flex-col gap-2 text-sm text-slate-300">
           Algorithm
           <select

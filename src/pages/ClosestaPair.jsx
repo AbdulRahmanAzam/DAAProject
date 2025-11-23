@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { buildComparisons, bruteForceClosestPair } from '../utils/bruteForce'
-import { divideAndConquerClosestPair } from '../utils/divideAndConquer'
+import { divideAndConquerClosestPair, buildDivideComparisons } from '../utils/divideAndConquer'
 import { buildSweepComparisons, sweepLineClosestPair } from '../utils/sweepLine'
 import { DEFAULT_POINT_COUNT, randomPoints } from '../utils/points'
 import FieldCanvas from '../components/closest/FieldCanvas'
 import { ControlsPanel, PlaybackPanel, PointsPanel } from '../components/closest/Panels'
+import { SAMPLE_POINT_SETS } from '../utils/samplePointSets'
 import { useSweepAnimation } from '../hooks/useSweepAnimation'
 
 function ClosestaPair() {
@@ -27,6 +28,7 @@ function ClosestaPair() {
 
   const steps = useMemo(() => {
 	if (algorithm === 'sweep') return buildSweepComparisons(points)
+	if (algorithm === 'divide') return buildDivideComparisons(points)
 	return buildComparisons(points)
   }, [algorithm, points])
 
@@ -135,6 +137,13 @@ function ClosestaPair() {
 			  manualPoint={manualPoint}
 			  setManualPoint={setManualPoint}
 			  onAddPoint={addPointManually}
+			  sampleSets={SAMPLE_POINT_SETS}
+			  onSelectSample={(id) => {
+				const sel = SAMPLE_POINT_SETS.find((s) => s.id === id)
+				if (!sel) return
+				setPoints(sel.points)
+				restartAlgorithm()
+			  }}
 			/>
 
 			<div className="mt-6 grid gap-4">
